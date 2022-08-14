@@ -1,0 +1,19 @@
+services:
+  # redis-server:
+  #   image: redis
+  #   # optional: specifiy 6379 default port
+  #   ports:
+  #     - "6379"
+  web:
+    restart: always
+    # stdin_open: true
+    # specifies Dockerfile for build
+    build: ./
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.dev
+    ports:
+      - "3001:8080"
+    volumes: 
+      - /usr/app/node_modules
+      - .:/usr/app
