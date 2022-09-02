@@ -6,7 +6,7 @@ services:
   #     - "6379"
   client:
     restart: always
-    # stdin_open: true
+    stdin_open: true
     # build: ./
     build:
       dockerfile: Dockerfile.dev
@@ -14,12 +14,12 @@ services:
     ports:
       - "8081:8080"
     volumes: 
-      - /usr/app/node_modules
-      - .:/usr/app
+      - /app/node_modules
+      - .:/app
   server:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
     volumes:
-      - /usr/app/node_modules
-      - ./server:/usr/app
+      - /app/node_modules
+      - ./server:/app

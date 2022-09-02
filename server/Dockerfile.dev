@@ -2,7 +2,7 @@
 FROM node:14-alpine
 
 # set working directory
-WORKDIR /usr/app
+WORKDIR /app
 
 # install and cache app dependencies
 COPY package.json ./

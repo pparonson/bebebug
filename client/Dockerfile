@@ -1,5 +1,6 @@
+
 # base image
-FROM node:14-alpine
+FROM node:14-alpine AS builder
 
 # set working directory
 WORKDIR /app
@@ -16,4 +17,7 @@ RUN npm install @vue/cli
 COPY ./ ./
 
 # start app
-CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "build"]
+
+FROM nginx
+COPY --from=builder /app/build /usr/share/nginx/html
