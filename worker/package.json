@@ -4,6 +4,7 @@
     "scripts": {
         "start": "node ./index.js"
     },
-    "dependencies": {},
-    "devDependencies": {}
+    "dependencies": {
+        "lnd-grpc": "^0.5.3"
+    }
 }

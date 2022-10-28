@@ -25,3 +25,12 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    ports:
+      - "5001:5000"
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
