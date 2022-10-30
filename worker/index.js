@@ -1,92 +1,33 @@
-const { Request, Response } = require("express");
-// import nodeManager from './node-manager';
-// import db from './posts-db';
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const LndGrpc = require("lnd-grpc");
 
-/**
- * POST /api/connect
- */
-// export const connect = async (Request, Response) => {
-//     // const { host, cert, macaroon } = req.body;
-//     // const { token, pubkey } = await nodeManager.connect(host, cert, macaroon);
-//     // await db.addNode({ host, cert, macaroon, token, pubkey });
-//     // res.send({ token });
-// };
+const app = express();
+const PORT = 5000;
+app.use(cors());
+app.use(bodyParser.json());
 
 /**
- * GET /api/info
+ * Express route handlers
  */
-// export const getInfo = async (Request, Response) => {
-//     console.log("BEGIN getInfo()");
-//     const grpc = new LndGrpc({
-//         lndconnectUri: "",
-//     });
+app.get("/", (req, res) => {
+    res.send("Hello World");
+});
 
-//     await grpc.connect();
+app.get("/api/info", async () => {
+    /**
+     * GET /api/info
+     */
+    console.log("BEGIN getInfo()");
+    const grpc = new LndGrpc({
+        lndconnectUri:
+            "lndconnect://127.0.0.1:10001?cert=MIICJjCCAc2gAwIBAgIRAOltkfkMF2l6F_YYoQ_SnTIwCgYIKoZIzj0EAwIwMTEfMB0GA1UEChMWbG5kIGF1dG9nZW5lcmF0ZWQgY2VydDEOMAwGA1UEAxMFYWxpY2UwHhcNMjIwODExMjEwNTU3WhcNMjMxMDA2MjEwNTU3WjAxMR8wHQYDVQQKExZsbmQgYXV0b2dlbmVyYXRlZCBjZXJ0MQ4wDAYDVQQDEwVhbGljZTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABOwkAz0Js8ZHnyxX5NYbGrp-PuWyoXOz98XHNS16l_8hr3Mb7yjN0j3LReKZj9zUR6nUaj0c-IU5GIGc3x3KpgGjgcUwgcIwDgYDVR0PAQH_BAQDAgKkMBMGA1UdJQQMMAoGCCsGAQUFBwMBMA8GA1UdEwEB_wQFMAMBAf8wHQYDVR0OBBYEFJS5FSPqtw-oJZybttUM-pFXFfUiMGsGA1UdEQRkMGKCBWFsaWNlgglsb2NhbGhvc3SCBWFsaWNlgg5wb2xhci1uNC1hbGljZYIEdW5peIIKdW5peHBhY2tldIIHYnVmY29ubocEfwAAAYcQAAAAAAAAAAAAAAAAAAAAAYcErBQAAjAKBggqhkjOPQQDAgNHADBEAiBycJKvte_IvaTbhahwa65Ux294bwtNAmHSRLV8Bnj93gIgBulGD39ZwK4L-0s8evyG1d7su542Thdh7er5kCgpZoc&macaroon=AgEDbG5kAvgBAwoQCIbSxfenIg62ObaXYAPFehIBMBoWCgdhZGRyZXNzEgRyZWFkEgV3cml0ZRoTCgRpbmZvEgRyZWFkEgV3cml0ZRoXCghpbnZvaWNlcxIEcmVhZBIFd3JpdGUaIQoIbWFjYXJvb24SCGdlbmVyYXRlEgRyZWFkEgV3cml0ZRoWCgdtZXNzYWdlEgRyZWFkEgV3cml0ZRoXCghvZmZjaGFpbhIEcmVhZBIFd3JpdGUaFgoHb25jaGFpbhIEcmVhZBIFd3JpdGUaFAoFcGVlcnMSBHJlYWQSBXdyaXRlGhgKBnNpZ25lchIIZ2VuZXJhdGUSBHJlYWQAAAYgayjXw6gX012qd_nMc2BXVkqNxTBv2mORACvJnwX7bNo",
+    });
+    await grpc.connect();
+    console.log(grpc.state);
+});
 
-//     console.log(grpc.state);
-
-//     // const { token } = req.body;
-//     // if (!token) throw new Error('Your node is not connected!');
-//     // // find the node that's making the request
-//     // const node = db.getNodeByToken(token);
-//     // if (!node) throw new Error('Node not found with this token');
-//     // // get the node's pubkey and alias
-//     // const rpc = nodeManager.getRpc(node.token);
-//     // const { alias, identityPubkey: pubkey } = await rpc.getInfo();
-//     // const { balance } = await rpc.channelBalance();
-//     // res.send({ alias, balance, pubkey });
-// };
-
-// /**
-//  * POST /api/posts/:id/invoice
-//  */
-// export const postInvoice = async (Request, Response) => {
-//     console.log("BEGIN postInvoice");
-
-//     const grpc = new LndGrpc({
-//         lndconnectUri: "",
-//     });
-
-//     let request = {
-//         payment_request: req.body.paymentRequest,
-//         timeout_seconds: 30000,
-//     };
-
-//     await grpc.connect();
-
-//     /**
-//      * NOTE: below commented listeners do not seem to work
-//      */
-
-//     // Do something if we detect that the wallet is locked.
-//     // grpc.on(`locked`, () => console.log('wallet locked!'));
-
-//     // Do something when the wallet gets unlocked.
-//     // grpc.on(`active`, () => console.log('wallet unlocked!'));
-
-//     // Do something when the connection gets disconnected.
-//     // grpc.on(`disconnected`, () => console.log('disconnected from lnd!'));
-
-//     console.log(grpc.state);
-
-//     let call = await grpc.services.Router.sendPaymentV2(request);
-//     call.on("data", function (response) {
-//         // A response was received from the server.
-//         console.log(response);
-//         if (response.status.toLowerCase() === "succeeded") {
-//             // TODO: need to mark post status as paid and return with confetti
-//             res.send(response);
-//         }
-//     });
-//     call.on("status", function (status) {
-//         // The current status of the stream.
-//         console.log(status);
-//     });
-//     call.on("end", async function () {
-//         // The server has closed the stream.
-//         console.log("END");
-//         // Disconnect from all services.
-//         await grpc.disconnect();
-//     });
-// };
+app.listen(5000, (err) => {
+    console.log(`Server is listening on PORT: ${PORT}`);
+});
