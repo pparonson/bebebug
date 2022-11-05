@@ -8,10 +8,12 @@ const PORT = 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
+console.log(`config: ${config}`);
+
 const LndGrpc = require("lnd-grpc");
 
 const grpc = new LndGrpc({
-    lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacroonUri,
+    lndconnectUri: config.connections?.lndConnect?.grpc?.adminMacroonUri,
 });
 
 /**
