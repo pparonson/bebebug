@@ -27,3 +27,4 @@ pnpm-debug.log*
 package-lock.json
 ./*/package-lock.json
 config/
+./*/config/
