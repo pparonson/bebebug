@@ -1,0 +1,5 @@
+{
+    "name": "worker",
+    "docker": "true",
+    "version": "0.0.1"
+}
