@@ -19,11 +19,12 @@ const grpc = new LndGrpc({
  * Express route handlers
  */
 app.get("/", (req, res) => {
-    // res.send("Hello World");
-    res.send({ message: "Hello World from worker", status: "200" });
+    res.send({
+        message: "Hello World from worker",
+    });
 });
 
-app.get("/api/info", async () => {
+app.get("/api/info", async (req, res) => {
     /**
      * GET /api/info
      */
@@ -32,9 +33,7 @@ app.get("/api/info", async () => {
     await grpc.connect();
     console.log(grpc.state);
 
-    // res.send(grpc.state);
-
-    res.send({ message: grpc.state, status: "200" });
+    res.send({ message: grpc.state });
 });
 
 app.listen(5000, (err) => {

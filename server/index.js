@@ -9,14 +9,6 @@ const PORT = 4000;
 app.use(cors());
 app.use(bodyParser.json());
 
-console.log(`config: ${config}`);
-
-const LndGrpc = require("lnd-grpc");
-
-const grpc = new LndGrpc({
-    lndconnectUri: config.connections?.lndConnect?.grpc?.adminMacroonUri,
-});
-
 /**
  * Express route handlers
  */
@@ -27,29 +19,28 @@ app.get("/", async (req, res) => {
     try {
         const response = await fetch(url);
         const json = await response.json();
-        res.send({ message: json.message, status: json.type });
+        res.send({
+            message: json.message,
+        });
     } catch (error) {
         console.log(error);
     }
 });
 
-app.get("/api/info", async () => {
+app.get("/api/info", async (req, res) => {
     /**
      * GET /api/info
      */
     console.log("BEGIN getInfo()");
-
-    // await grpc.connect();
-    // console.log(grpc.state);
-    // res.send(grpc.state);
-
-    // call worker to request worker to call lightning node
-    // const url = "http://worker:4000/api/info";
+    // server request to worker to request lightning node info/status
     const url = `${config.connections.dockerUserDefinedNetwork.worker}/api/info`;
     try {
         const response = await fetch(url);
         const json = await response.json();
-        res.send({ message: json.message, status: json.type });
+
+        res.send({
+            message: json.message,
+        });
     } catch (error) {
         console.log(error);
     }
