@@ -1,39 +1,64 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const config = require("./config/config");
-
 const fetch = require("node-fetch");
 const LndGrpc = require("lnd-grpc");
+const config = require("./config/config");
 
 const app = express();
 const PORT = 5000;
-app.use(cors());
-app.use(bodyParser.json());
-
 const grpc = new LndGrpc({
     lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacroonUri,
 });
+
+app.use(cors());
+app.use(bodyParser.json());
 
 /**
  * Express route handlers
  */
 app.get("/", (req, res) => {
     res.send({
-        message: "Hello World from worker",
+        message: "Worker service is ready",
     });
+});
+
+app.get("/api/connect", async (req, res) => {
+    /**
+     * GET /api/connect
+     */
+    await grpc.connect();
+
+    console.log(grpc.state);
+    res.send({ message: `grpc is now connected, state: ${grpc.state}` });
 });
 
 app.get("/api/info", async (req, res) => {
     /**
      * GET /api/info
+     * get the Lightning Node balance and other info
      */
-    console.log("BEGIN getInfo()");
-
-    await grpc.connect();
     console.log(grpc.state);
 
-    res.send({ message: grpc.state });
+    // Make some api calls...
+    const { Lightning, Autopilot, Invoices } = grpc.services;
+
+    // Fetch current balance.
+    const balance = await Lightning.walletBalance();
+    // const info = await Lightning.getInfo();
+
+    res.send({ message: `Balance: ${JSON.stringify(balance, null, 2)}` });
+});
+
+app.get("/api/disconnect", async (req, res) => {
+    /**
+     * GET /api/disconnect
+     * Disconnect from all gRPC services. It's important to disconnect from the lnd node once you have finished using it. This will free up any open handles that could prevent your application from properly closing.
+     */
+    console.log(grpc.state);
+
+    await grpc.disconnect();
+    res.send({ message: "grpc is now disconnected" });
 });
 
 app.listen(5000, (err) => {
