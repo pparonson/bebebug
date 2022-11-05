@@ -9,7 +9,7 @@
         "body-parser": "^1.20.0",
         "cors": "^2.8.5",
         "express": "^4.18.1",
-        "lnd-grpc": "^0.5.3"
-    },
-    "devDependencies": {}
+        "lnd-grpc": "^0.5.3",
+        "node-fetch": "^2.6.7"
+    }
 }
