@@ -1,9 +1,8 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const fetch = require("node-fetch");
-const LndGrpc = require("lnd-grpc");
-const config = require("./config/config");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import LndGrpc from "lnd-grpc";
+import config from "./config/config.js";
 
 const app = express();
 const PORT = 5000;
@@ -53,7 +52,10 @@ app.get("/api/info", async (req, res) => {
 app.get("/api/disconnect", async (req, res) => {
     /**
      * GET /api/disconnect
-     * Disconnect from all gRPC services. It's important to disconnect from the lnd node once you have finished using it. This will free up any open handles that could prevent your application from properly closing.
+     * Disconnect from all gRPC services. It's important to disconnect
+     * from the lnd node once you have finished using it. This will free
+     * up any open handles that could prevent your application from
+     * properly closing.
      */
     console.log(grpc.state);
 

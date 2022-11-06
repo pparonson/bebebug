@@ -1,8 +1,8 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const fetch = require("node-fetch");
-const config = require("./config/config");
+import express from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import axios from "axios";
+import config from "./config/config.js";
 
 const app = express();
 const PORT = 4000;
@@ -12,15 +12,32 @@ app.use(cors());
 app.use(bodyParser.json());
 
 /**
+ * Axios handlers
+ */
+const sendGetRequest = async (url, route = "/") => {
+    try {
+        const resp = await axios.get(`${url}${route}`);
+        console.log(resp.data);
+        return resp.data;
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+};
+
+/**
  * Express route handlers
  */
 app.get("/", async (req, res) => {
-    const url = `${workerUrl}/`;
+    // const url = `${workerUrl}/`;
     try {
-        const response = await fetch(url);
-        const json = await response.json();
+        // const response = await fetch(url);
+        // const json = await response.json();
+        const axiosResp = await sendGetRequest(workerUrl);
         res.send({
-            message: json.message,
+            // message: "Hello World",
+            // message: json.message,
+            data: axiosResp,
         });
     } catch (error) {
         console.log(error);
@@ -32,13 +49,10 @@ app.get("/api/connect", async (req, res) => {
      * GET /api/connect
      * server request to worker to request connection to lightning node
      */
-    const url = `${workerUrl}/api/connect`;
     try {
-        const response = await fetch(url);
-        const json = await response.json();
-
+        const axiosResp = await sendGetRequest(workerUrl, "/api/connect");
         res.send({
-            message: json.message,
+            data: axiosResp,
         });
     } catch (error) {
         console.log(error);
@@ -50,13 +64,10 @@ app.get("/api/info", async (req, res) => {
      * GET /api/info
      * server request to worker to request lightning node info/status
      */
-    const url = `${workerUrl}/api/info`;
     try {
-        const response = await fetch(url);
-        const json = await response.json();
-
+        const axiosResp = await sendGetRequest(workerUrl, "/api/info");
         res.send({
-            message: json.message,
+            data: axiosResp,
         });
     } catch (error) {
         console.log(error);
@@ -68,13 +79,10 @@ app.get("/api/disconnect", async (req, res) => {
      * GET /api/disconnect
      * server request to worker to request to terminate connection to lightning node
      */
-    const url = `${workerUrl}/api/connect`;
     try {
-        const response = await fetch(url);
-        const json = await response.json();
-
+        const axiosResp = await sendGetRequest(workerUrl, "/api/disconnect");
         res.send({
-            message: json.message,
+            data: axiosResp,
         });
     } catch (error) {
         console.log(error);
