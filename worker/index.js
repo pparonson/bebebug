@@ -7,7 +7,7 @@ import config from "./config/config.js";
 const app = express();
 const PORT = 5000;
 const grpc = new LndGrpc({
-    lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacroonUri,
+    lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacaroonUri,
 });
 // const grpc = new LndGrpc(
 //     {
