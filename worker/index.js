@@ -9,12 +9,6 @@ const PORT = 5000;
 const grpc = new LndGrpc({
     lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacaroonUri,
 });
-// const grpc = new LndGrpc(
-//     {
-//         lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacroonUri,
-//     },
-//     { deadline: new Date().getSeconds() + 30 }
-// );
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -53,6 +47,41 @@ app.get("/api/info", async (req, res) => {
     console.log(JSON.stringify(info, null, 2));
 
     res.send({ message: `Lightning: ${JSON.stringify(info, null, 2)}` });
+});
+
+app.get("/api/payment/:id/invoice", async () => {
+    /**
+     * POST /api/payment/:id/invoice
+     * send a payment for a lightning invoice request
+     */
+    console.log(`grpc.state: ${grpc.state}`);
+
+    let request = {
+        payment_request: req.body.paymentRequest,
+        timeout_seconds: config.defaultTimeout,
+    };
+
+    await grpc.connect();
+
+    let call = await grpc.services.Router.sendPaymentV2(request);
+
+    call.on("data", (response) => {
+        console.log(`Payment response: ${JSON.stringify(response, null, 2)}`);
+        if (response.status.toLowerCase() === "succeeded") {
+            res.send(response);
+        }
+    });
+
+    call.on("status", (status) => {
+        // The current status of the stream.
+        console.log(`Payment stream status: ${status}`);
+    });
+    call.on("end", async () => {
+        // The server has closed the stream.
+        console.log("Payment stream has ended.  It is okay to disconnect.");
+        // Disconnect from all services.
+        // await grpc.disconnect();
+    });
 });
 
 app.get("/api/disconnect", async (req, res) => {

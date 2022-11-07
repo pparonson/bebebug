@@ -78,6 +78,24 @@ app.get("/api/info", async (req, res) => {
     }
 });
 
+app.get("/api/payment/:id/invoice", async () => {
+    /**
+     * GET /api/payment/:id/invoice
+     * server request to worker to send a payment for a lightning invoice request
+     */
+    try {
+        const axiosResponse = await sendGetRequest(
+            workerUrl,
+            "/api/payment/:id/invoice"
+        );
+        res.send({
+            data: axiosResponse,
+        });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 app.get("/api/disconnect", async (req, res) => {
     /**
      * GET /api/disconnect
