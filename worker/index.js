@@ -9,6 +9,12 @@ const PORT = 5000;
 const grpc = new LndGrpc({
     lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacroonUri,
 });
+// const grpc = new LndGrpc(
+//     {
+//         lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacroonUri,
+//     },
+//     { deadline: new Date().getSeconds() + 30 }
+// );
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -28,25 +34,25 @@ app.get("/api/connect", async (req, res) => {
      */
     await grpc.connect();
 
-    console.log(grpc.state);
+    console.log(`grpc.state: ${grpc.state}`);
     res.send({ message: `grpc is now connected, state: ${grpc.state}` });
 });
 
 app.get("/api/info", async (req, res) => {
     /**
      * GET /api/info
-     * get the Lightning Node balance and other info
+     * get the Lightning Node info
      */
-    console.log(grpc.state);
+    console.log(`grpc.state: ${grpc.state}`);
 
-    // Make some api calls...
-    const { Lightning, Autopilot, Invoices } = grpc.services;
+    // await grpc.activateLightning();
+    const { Lightning } = grpc.services;
 
-    // Fetch current balance.
-    const balance = await Lightning.walletBalance();
-    // const info = await Lightning.getInfo();
+    // const balance = await Lightning.walletBalance();
+    const info = await Lightning.getInfo();
+    console.log(JSON.stringify(info, null, 2));
 
-    res.send({ message: `Balance: ${JSON.stringify(balance, null, 2)}` });
+    res.send({ message: `Lightning: ${JSON.stringify(info, null, 2)}` });
 });
 
 app.get("/api/disconnect", async (req, res) => {
@@ -57,7 +63,7 @@ app.get("/api/disconnect", async (req, res) => {
      * up any open handles that could prevent your application from
      * properly closing.
      */
-    console.log(grpc.state);
+    console.log(`grpc.state: ${grpc.state}`);
 
     await grpc.disconnect();
     res.send({ message: "grpc is now disconnected" });

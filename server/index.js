@@ -16,7 +16,11 @@ app.use(bodyParser.json());
  */
 const sendGetRequest = async (url, route = "/") => {
     try {
-        const resp = await axios.get(`${url}${route}`);
+        // const resp = await axios.get(`${url}${route}`);
+        const resp = await axios(`${url}${route}`, {
+            timeout: config.defaultTimeout, // Override the default timeout
+            method: "GET",
+        });
         console.log(resp.data);
         return resp.data;
     } catch (err) {
