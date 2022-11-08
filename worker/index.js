@@ -6,7 +6,8 @@ import Handler from "./src/Handler.js";
 import config from "./config/config.js";
 
 const app = express();
-const PORT = 5000;
+// const PORT = 5000;
+const PORT = config.connections.dockerUserDefinedNetwork?.worker?.port;
 const grpc = new LndGrpc({
     lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacaroonUri,
 });
@@ -101,7 +102,7 @@ app.get("/api/disconnect", async (req, res) => {
     res.send({ message: "grpc is now disconnected" });
 });
 
-app.listen(5000, (err) => {
+app.listen(PORT, (err) => {
     console.log(`Server is listening on PORT: ${PORT}`);
 });
 

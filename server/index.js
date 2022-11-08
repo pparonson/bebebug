@@ -5,7 +5,8 @@ import Handler from "./src/Handler.js";
 import config from "./config/config.js";
 
 const app = express();
-const PORT = 4000;
+// const PORT = 4000;
+const PORT = config.connections.dockerUserDefinedNetwork?.server?.port;
 const handler = new Handler();
 
 app.use(cors());
@@ -112,7 +113,7 @@ app.get("/api/disconnect", async (req, res) => {
     }
 });
 
-app.listen(4000, (err) => {
+app.listen(PORT, (err) => {
     console.log(`Server is listening on PORT: ${PORT}`);
 });
 
