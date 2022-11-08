@@ -11,10 +11,12 @@ const grpc = new LndGrpc({
     lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacaroonUri,
 });
 
-const handler = new Handler();
+// const handler = new Handler(app, grpc);
 
 app.use(cors());
 app.use(bodyParser.json());
+
+const handler = new Handler(app, grpc);
 
 /**
  * Express route handlers

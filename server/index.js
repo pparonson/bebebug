@@ -6,10 +6,12 @@ import config from "./config/config.js";
 
 const app = express();
 const PORT = config.connections.dockerUserDefinedNetwork?.server?.port;
-const handler = new Handler();
+// const handler = new Handler();
 
 app.use(cors());
 app.use(bodyParser.json());
+
+const handler = new Handler(app);
 
 /**
  * Axios handlers
