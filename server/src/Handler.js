@@ -29,12 +29,12 @@ export default class Handler {
              * server request to worker to request connection to lightning node
              */
             try {
-                const axiosResp = await sendGetRequest(
+                const response = await sendGetRequest(
                     workerUrl,
                     "/api/connect"
                 );
                 res.send({
-                    data: axiosResp,
+                    data: response,
                 });
             } catch (error) {
                 console.log(error);
@@ -47,9 +47,9 @@ export default class Handler {
              * server request to worker to request lightning node info/status
              */
             try {
-                const axiosResp = await sendGetRequest(workerUrl, "/api/info");
+                const response = await sendGetRequest(workerUrl, "/api/info");
                 res.send({
-                    data: axiosResp,
+                    data: response,
                 });
             } catch (error) {
                 console.log(error);
@@ -62,12 +62,12 @@ export default class Handler {
              * server request to worker to send a payment for a lightning invoice request
              */
             try {
-                const axiosResponse = await sendGetRequest(
+                const response = await sendGetRequest(
                     workerUrl,
                     "/api/payment/:id/invoice"
                 );
                 res.send({
-                    data: axiosResponse,
+                    data: response,
                 });
             } catch (error) {
                 console.log(error);
@@ -80,12 +80,12 @@ export default class Handler {
              * server request to worker to request to terminate connection to lightning node
              */
             try {
-                const axiosResp = await sendGetRequest(
+                const response = await sendGetRequest(
                     workerUrl,
                     "/api/disconnect"
                 );
                 res.send({
-                    data: axiosResp,
+                    data: response,
                 });
             } catch (error) {
                 console.log(error);
