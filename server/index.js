@@ -1,12 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import axios from "axios";
+// import axios from "axios";
+import Handler from "./src/Handler.js";
 import config from "./config/config.js";
 
 const app = express();
 const PORT = 4000;
 const workerUrl = config.connections.dockerUserDefinedNetwork.worker;
+const handler = new Handler();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -16,15 +18,28 @@ app.use(bodyParser.json());
  */
 const sendGetRequest = async (url, route = "/") => {
     try {
-        // const resp = await axios.get(`${url}${route}`);
-        const resp = await axios(`${url}${route}`, {
-            timeout: config.defaultTimeout, // Override the default timeout
-            method: "GET",
-        });
-        console.log(resp.data);
-        return resp.data;
-    } catch (err) {
-        console.error(err);
+        // const resp = await axios(`${url}${route}`, {
+        //     timeout: config.defaultTimeout, // Override the default timeout
+        //     method: "GET",
+        // });
+        // console.log(resp.data);
+        // return resp.data;
+
+        const res = await fetch(`${url}${route}`);
+        // headers: {
+        // Accept: 'application/json',
+        // },
+        // signal: AbortSignal.timeout(config.defaultTimeout),
+
+        if (res.ok) {
+            const data = await res.json();
+            console.log(`data: ${data}`);
+            return data;
+        } else {
+            console.log("Fetch failed to return a response");
+        }
+    } catch (error) {
+        console.error(`Error: ${error}`);
         throw err;
     }
 };
@@ -114,3 +129,5 @@ app.get("/api/disconnect", async (req, res) => {
 app.listen(4000, (err) => {
     console.log(`Server is listening on PORT: ${PORT}`);
 });
+
+handler.process();
