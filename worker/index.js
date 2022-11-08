@@ -6,7 +6,6 @@ import Handler from "./src/Handler.js";
 import config from "./config/config.js";
 
 const app = express();
-// const PORT = 5000;
 const PORT = config.connections.dockerUserDefinedNetwork?.worker?.port;
 const grpc = new LndGrpc({
     lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacaroonUri,

@@ -5,7 +5,6 @@ import Handler from "./src/Handler.js";
 import config from "./config/config.js";
 
 const app = express();
-// const PORT = 4000;
 const PORT = config.connections.dockerUserDefinedNetwork?.server?.port;
 const handler = new Handler();
 
