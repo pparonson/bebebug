@@ -6,7 +6,6 @@ import config from "./config/config.js";
 
 const app = express();
 const PORT = config.connections.dockerUserDefinedNetwork?.server?.port;
-// const handler = new Handler();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,19 +18,34 @@ const handler = new Handler(app);
 const sendGetRequest = async (url, route = "/") => {
     try {
         const res = await fetch(`${url}${route}`, {
-            signal: AbortSignal.timeout(config.defaultTimeout),
+            signal: AbortSignal.timeout(5000),
         });
-
         if (res.ok) {
             const data = await res.json();
             console.log(`data: ${data}`);
             return data;
         } else {
             console.log("Fetch failed to return a response");
+            return {
+                status: 500,
+                message: "Fetch failed to return a response",
+            };
         }
     } catch (error) {
-        console.error(`Error: ${error}`);
-        throw error;
+        if (error.name === "TimeoutError") {
+            console.error(`Error: TimeoutError - ${config.defaultTimeout} ms`);
+        } else if (error.name === "AbortError") {
+            console.error(
+                "Fetch aborted by user action (browser stop button, closing tab, etc."
+            );
+        } else if (error.name === "TypeError") {
+            console.error("AbortSignal.timeout() method is not supported");
+        } else {
+            // A network error, or some other problem.
+            console.error(
+                `Error: type: ${error.name}, message: ${error.message}`
+            );
+        }
     }
 };
 

@@ -7,7 +7,5 @@ export default class Handler {
 
     process() {
         console.log(`Begin ${packageJson.name} process..`);
-        console.log(`app: ${this.app}`);
-        console.log(`grpc: ${this.grpc}`);
     }
 }
