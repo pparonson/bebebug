@@ -8,7 +8,8 @@ import config from "./config/config.js";
 const app = express();
 const PORT = config.connections.dockerUserDefinedNetwork?.worker?.port;
 const grpc = new LndGrpc({
-    lndconnectUri: config?.connections?.lndConnect?.grpc?.adminMacaroonUri,
+    lndconnectUri:
+        config?.connections?.lightningNode?.lndConnect?.grpc?.adminMacaroonUri,
 });
 
 app.use(cors());
