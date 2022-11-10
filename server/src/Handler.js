@@ -74,21 +74,22 @@ export default class Handler {
         });
 
         this.app.get("/api/disconnect", async (req, res) => {
+            await this.routes.disconnect(req, res, "/api/disconnect");
             /**
              * GET /api/disconnect
              * server request to worker to request to terminate connection to lightning node
              */
-            try {
-                const response = await sendGetRequest(
-                    workerUrl,
-                    "/api/disconnect"
-                );
-                res.send({
-                    data: response,
-                });
-            } catch (error) {
-                console.log(error);
-            }
+            // try {
+            //     const response = await sendGetRequest(
+            //         workerUrl,
+            //         "/api/disconnect"
+            //     );
+            //     res.send({
+            //         data: response,
+            //     });
+            // } catch (error) {
+            //     console.log(error);
+            // }
         });
 
         /**

@@ -47,6 +47,20 @@ app.get("/api/info", async (req, res) => {
     });
 });
 
+app.get("/api/disconnect", async (req, res) => {
+    /**
+     * GET /api/disconnect
+     * Disconnect from all gRPC services. It's important to disconnect
+     * from the lnd node once you have finished using it. This will free
+     * up any open handles that could prevent your application from
+     * properly closing.
+     */
+    console.log(`grpc.state: ${grpc.state}`);
+
+    await grpc.disconnect();
+    res.send({ message: "grpc is now disconnected" });
+});
+
 app.listen(PORT, (err) => {
     console.log(`Server is listening on PORT: ${PORT}`);
 });
