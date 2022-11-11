@@ -26,18 +26,6 @@ export default class Handler {
              * server request to worker to request connection to lightning node
              */
             await this.routes.connect(req, res, "/api/connect");
-
-            // try {
-            //     const response = await sendGetRequest(
-            //         workerUrl,
-            //         "/api/connect"
-            //     );
-            //     res.send({
-            //         data: response,
-            //     });
-            // } catch (error) {
-            //     console.log(error);
-            // }
         });
 
         this.app.get("/api/info", async (req, res) => {
@@ -45,32 +33,28 @@ export default class Handler {
              * GET /api/info
              * server request to worker to request lightning node info/status
              */
-            try {
-                const response = await sendGetRequest(workerUrl, "/api/info");
-                res.send({
-                    data: response,
-                });
-            } catch (error) {
-                console.log(error);
-            }
+
+            await this.routes.getInfo(req, res, "/api/info");
         });
 
-        this.app.get("/api/payment/:id/invoice", async () => {
+        this.app.get("/api/paymentrequest/:id/invoice", async () => {
             /**
              * GET /api/payment/:id/invoice
              * server request to worker to send a payment for a lightning invoice request
              */
-            try {
-                const response = await sendGetRequest(
-                    workerUrl,
-                    "/api/payment/:id/invoice"
-                );
-                res.send({
-                    data: response,
-                });
-            } catch (error) {
-                console.log(error);
-            }
+
+            await this.routes.paymentRequest(req, res, "/api/paymentrequest");
+            // try {
+            //     const response = await sendGetRequest(
+            //         workerUrl,
+            //         "/api/payment/:id/invoice"
+            //     );
+            //     res.send({
+            //         data: response,
+            //     });
+            // } catch (error) {
+            //     console.log(error);
+            // }
         });
 
         this.app.get("/api/disconnect", async (req, res) => {
@@ -79,17 +63,7 @@ export default class Handler {
              * GET /api/disconnect
              * server request to worker to request to terminate connection to lightning node
              */
-            // try {
-            //     const response = await sendGetRequest(
-            //         workerUrl,
-            //         "/api/disconnect"
-            //     );
-            //     res.send({
-            //         data: response,
-            //     });
-            // } catch (error) {
-            //     console.log(error);
-            // }
+            await this.routes.disconnect(req, res, "/api/disconnect");
         });
 
         /**

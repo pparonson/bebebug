@@ -31,6 +31,30 @@ export default class Routes {
         }
     }
 
+    async getInfo(req, res, route) {
+        const url = `${this.url}${route}`;
+        try {
+            const response = await this.sendGetRequest(url);
+            res.send({
+                data: response,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async paymentRequest(req, res, route) {
+        const url = `${this.url}${route}`;
+        try {
+            const response = await this.sendGetRequest(url);
+            res.send({
+                data: response,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async disconnect(req, res, route) {
         const url = `${this.url}${route}`;
         try {
