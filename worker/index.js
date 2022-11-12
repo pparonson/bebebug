@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
-import LndGrpc from "lnd-grpc";
+// import LndGrpc from "lnd-grpc";
 import Handler from "./src/Handler.js";
 import config from "./config/config.js";
 
@@ -14,12 +14,12 @@ app.use(bodyParser.json());
 /**
  * TODO: attach grpc to a session life cycle for scalability?
  */
-const grpc = new LndGrpc({
-    lndconnectUri:
-        config?.connections?.lightningNode?.lndConnect?.grpc?.adminMacaroonUri,
-});
+// const grpc = new LndGrpc({
+//     lndconnectUri:
+//         config?.connections?.lightningNode?.lndConnect?.grpc?.adminMacaroonUri,
+// });
 
-const handler = new Handler(app, grpc);
+const handler = new Handler(app);
 
 app.listen(PORT, (err) => {
     console.log(`Server is listening on PORT: ${PORT}`);

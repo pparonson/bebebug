@@ -1,12 +1,12 @@
 import config from "../config/config.js";
-import Routes from "./Routes.js";
+import NodeWorker from "./NodeWorker.js";
 import packageJson from "../package.json" assert { type: "json" };
 export default class Handler {
-    constructor(app, grpc) {
+    constructor(app) {
         this.app = app;
-        this.grpc = grpc;
+        // this.grpc = grpc;
         this.config = config;
-        this.routes = new Routes(app, grpc);
+        this.nodeWorker = new NodeWorker();
     }
 
     process() {
@@ -15,14 +15,14 @@ export default class Handler {
          * Express route handlers
          */
         this.app.get("/", async (req, res) => {
-            await this.routes.probe(req, res, "/");
+            await this.nodeWorker.probe(req, res, "/");
         });
 
         this.app.get("/api/connect", async (req, res) => {
             /**
              * GET /api/connect
              */
-            await this.routes.connect(req, res, "/api/connect");
+            await this.nodeWorker.connect(req, res, "/api/connect");
         });
 
         this.app.get("/api/info", async (req, res) => {
@@ -30,7 +30,7 @@ export default class Handler {
              * GET /api/info
              * get the Lightning Node info
              */
-            await this.routes.getInfo(req, res);
+            await this.nodeWorker.getInfo(req, res);
         });
 
         this.app.post("/api/payment/:id", async (req, res) => {
@@ -38,7 +38,7 @@ export default class Handler {
              * POST /api/payment
              * send a payment for a lightning invoice request
              */
-            await this.routes.paymentRequest(req, res);
+            await this.nodeWorker.paymentRequest(req, res);
         });
 
         this.app.get("/api/disconnect", async (req, res) => {
@@ -49,7 +49,7 @@ export default class Handler {
              * up any open handles that could prevent your application from
              * properly closing.
              */
-            await this.routes.disconnect(req, res);
+            await this.nodeWorker.disconnect(req, res);
         });
     }
 }

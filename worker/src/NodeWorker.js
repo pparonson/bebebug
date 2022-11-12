@@ -1,11 +1,10 @@
 import config from "../config/config.js";
-export default class Routes {
-    constructor(app, grpc) {
-        this.app = app;
-        this.grpc = grpc;
+import LndGrpc from "lnd-grpc";
+export default class NodeWorker {
+    constructor() {
+        // this.app = app;
+        this.grpc = {};
         this.config = config;
-        this.worker = config.connections.dockerUserDefinedNetwork?.worker;
-        this.url = `${this.worker?.url}:${this.worker?.port}`;
     }
 
     async probe(req, res) {
@@ -15,6 +14,11 @@ export default class Routes {
     }
 
     async connect(req, res) {
+        this.grpc = new LndGrpc({
+            lndconnectUri:
+                this.config?.connections?.lightningNode?.lndConnect?.grpc
+                    ?.adminMacaroonUri,
+        });
         await this.grpc.connect();
 
         console.log(`grpc.state: ${this.grpc.state}`);
