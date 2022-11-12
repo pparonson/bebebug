@@ -7,12 +7,6 @@ export default class NodeWorker {
         this.config = config;
     }
 
-    async probe(req, res) {
-        res.send({
-            message: "Worker service is ready",
-        });
-    }
-
     async connect(req, res) {
         this.grpc = new LndGrpc({
             lndconnectUri:

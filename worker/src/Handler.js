@@ -4,7 +4,6 @@ import packageJson from "../package.json" assert { type: "json" };
 export default class Handler {
     constructor(app) {
         this.app = app;
-        // this.grpc = grpc;
         this.config = config;
         this.nodeWorker = new NodeWorker();
     }
@@ -15,7 +14,9 @@ export default class Handler {
          * Express route handlers
          */
         this.app.get("/", async (req, res) => {
-            await this.nodeWorker.probe(req, res, "/");
+            res.send({
+                message: "Worker service is ready",
+            });
         });
 
         this.app.get("/api/connect", async (req, res) => {
