@@ -47,6 +47,52 @@ app.get("/api/info", async (req, res) => {
     });
 });
 
+app.post("/api/payment/:id", async (req, res) => {
+    /**
+     * POST /api/payment
+     * send a payment for a lightning invoice request
+     */
+    console.log(`grpc.state: ${grpc.state}`);
+    console.log(`id: ${req.params.id}`);
+
+    let request = {
+        payment_request: req.body.paymentRequest,
+        timeout_seconds: config.defaultTimeout,
+    };
+
+    await grpc.connect();
+
+    let call = await grpc.services.Router.sendPaymentV2(request);
+
+    call.on("data", (response) => {
+        console.log(`Payment response: ${JSON.stringify(response, null, 2)}`);
+        if (response?.status?.toLowerCase() === "succeeded") {
+            res.send(response);
+        }
+        // else {
+        // if (!response) {
+        // console.log("No response");
+        // } else if (response?.failure_reason) {
+        // res.send({ status: 500, message: response.failure_reason });
+        // } else {
+        // console.log("Unknown failure");
+        // }
+        // }
+    });
+
+    call.on("status", (status) => {
+        // The current status of the stream.
+        console.log(`Payment stream status: ${status}`);
+    });
+
+    call.on("end", async () => {
+        // The server has closed the stream.
+        console.log("Payment stream has ended.  It is okay to disconnect.");
+        // Disconnect from all services.
+        // await grpc.disconnect();
+    });
+});
+
 app.get("/api/disconnect", async (req, res) => {
     /**
      * GET /api/disconnect
