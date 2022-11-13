@@ -2,7 +2,6 @@ import config from "../config/config.js";
 import LndGrpc from "lnd-grpc";
 export default class NodeWorker {
     constructor() {
-        // this.app = app;
         this.grpc = {};
         this.config = config;
     }
