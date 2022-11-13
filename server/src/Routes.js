@@ -6,7 +6,7 @@ export default class Routes {
         this.url = `${this.worker?.url}:${this.worker?.port}`;
     }
 
-    async probe(req, res, route) {
+    async workerProbe(req, res, route) {
         const url = `${this.url}${route}`;
         try {
             const response = await this.sendGetRequest(url);
@@ -18,7 +18,37 @@ export default class Routes {
         }
     }
 
-    async connect(req, res, route) {
+    /**
+     * BonuslyWorker
+     */
+    async getUsersBonusly(req, res, route) {
+        const url = `${this.url}${route}`;
+        try {
+            const response = await this.sendGetRequest(url);
+            res.send({
+                data: response,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getUserBonusly(req, res, route) {
+        const url = `${this.url}${route}`;
+        try {
+            const response = await this.sendGetRequest(url);
+            res.send({
+                data: response,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    /**
+     * NodeWorker
+     */
+    async connectNode(req, res, route) {
         const url = `${this.url}${route}`;
         console.log(`connect url: ${url}`);
         try {
@@ -31,7 +61,7 @@ export default class Routes {
         }
     }
 
-    async getInfo(req, res, route) {
+    async getInfoNode(req, res, route) {
         const url = `${this.url}${route}`;
         try {
             const response = await this.sendGetRequest(url);
@@ -43,10 +73,10 @@ export default class Routes {
         }
     }
 
-    async paymentRequest(req, res, route) {
+    async paymentRequestNode(req, res, route) {
         const url = `${this.url}${route}`;
         try {
-            const response = await this.sendGetRequest(url);
+            const response = await this.sendPostRequest(url, req.body);
             res.send({
                 data: response,
             });
@@ -55,7 +85,7 @@ export default class Routes {
         }
     }
 
-    async disconnect(req, res, route) {
+    async disconnectNode(req, res, route) {
         const url = `${this.url}${route}`;
         try {
             const response = await this.sendGetRequest(url);
@@ -78,7 +108,22 @@ export default class Routes {
             console.log(`data: ${data}`);
             return data;
         } else {
-            console.log("Error: Fetch attempt failed");
+            console.log("Error: Fetch GET attempt failed");
+        }
+    }
+
+    async sendPostRequest(url, payload) {
+        const res = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            console.log(`data: ${data}`);
+            return data;
+        } else {
+            console.log("Error: Fetch POST attempt failed");
         }
     }
 }
