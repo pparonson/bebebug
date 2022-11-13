@@ -1,24 +1,33 @@
 import config from "../config/config.js";
-export default class NodeWorker {
+export default class BonuslyWorker {
     constructor() {
         this.config = config;
-    }
-
-    async connect(req, res) {
-        // console.log(`grpc.state: ${this.grpc.state}`);
-        // res.send({
-        //     message: `grpc is now connected, state: ${this.grpc.state}`,
-        // });
     }
 
     async getUsers(req, res, route) {
         /**
          * Get a list of your company's users.
-         * https://bonus.ly/api/v1/users?access_token=d84e66e776450f8b7bbf90b74976fb35
+         * https://bonus.ly/api/v1/users
          */
         let url = `${this.config.connections.bonuslyApi?.host}${route}`;
-        // let url =
-        //     "https://bonus.ly/api/v1/users?access_token=d84e66e776450f8b7bbf90b74976fb35";
+
+        try {
+            const response = await this.sendGetRequest(url);
+            res.send({
+                data: response,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getUser(req, res, route) {
+        /**
+         * Get a company user.
+         * https://bonus.ly/api/v1/users/id
+         */
+        let url = `${this.config.connections.bonuslyApi?.host}${route}`;
+
         try {
             const response = await this.sendGetRequest(url);
             res.send({
@@ -40,7 +49,6 @@ export default class NodeWorker {
             }),
         };
         const res = await fetch(url, options);
-        // const res = await fetch(url);
 
         if (res.ok) {
             const data = await res.json();

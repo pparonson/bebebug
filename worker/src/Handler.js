@@ -29,6 +29,19 @@ export default class Handler {
             await this.bonuslyWorker.getUsers(req, res, "/users");
         });
 
+        this.app.get("/api/users/:id", async (req, res) => {
+            /**
+             * GET /api/users
+             * get the Bonusly users
+             */
+            console.log(`id: ${req.params?.id}`);
+            await this.bonuslyWorker.getUsers(
+                req,
+                res,
+                `/users/${req.params?.id}`
+            );
+        });
+
         /**
          * NodeWorker
          */
