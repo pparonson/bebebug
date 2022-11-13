@@ -6,7 +6,6 @@ export default class BonuslyWorker {
 
     async getUsers(req, res, route) {
         /**
-         * Get a list of your company's users.
          * https://bonus.ly/api/v1/users
          */
         let url = `${this.config.connections.bonuslyApi?.host}${route}`;
@@ -23,7 +22,6 @@ export default class BonuslyWorker {
 
     async getUser(req, res, route) {
         /**
-         * Get a company user.
          * https://bonus.ly/api/v1/users/id
          */
         let url = `${this.config.connections.bonuslyApi?.host}${route}`;

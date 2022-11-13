@@ -44,17 +44,6 @@ export default class Handler {
              */
 
             await this.routes.paymentRequest(req, res, "/api/paymentrequest");
-            // try {
-            //     const response = await sendGetRequest(
-            //         workerUrl,
-            //         "/api/payment/:id/invoice"
-            //     );
-            //     res.send({
-            //         data: response,
-            //     });
-            // } catch (error) {
-            //     console.log(error);
-            // }
         });
 
         this.app.get("/api/disconnect", async (req, res) => {
@@ -65,47 +54,5 @@ export default class Handler {
              */
             await this.routes.disconnect(req, res, "/api/disconnect");
         });
-
-        /**
-         * Axios handlers
-         * TODO: this is getting moved to Routes.js
-         */
-        // const sendGetRequest = async (url, route = "/") => {
-        //     try {
-        //         const res = await fetch(`${url}${route}`, {
-        //             signal: AbortSignal.timeout(5000),
-        //         });
-        //         if (res.ok) {
-        //             const data = await res.json();
-        //             console.log(`data: ${data}`);
-        //             return data;
-        //         } else {
-        //             console.log("Fetch failed to return a response");
-        //             return {
-        //                 status: 500,
-        //                 message: "Fetch failed to return a response",
-        //             };
-        //         }
-        //     } catch (error) {
-        //         if (error.name === "TimeoutError") {
-        //             console.error(
-        //                 `Error: TimeoutError - ${config.defaultTimeout} ms`
-        //             );
-        //         } else if (error.name === "AbortError") {
-        //             console.error(
-        //                 "Fetch aborted by user action (browser stop button, closing tab, etc."
-        //             );
-        //         } else if (error.name === "TypeError") {
-        //             console.error(
-        //                 "AbortSignal.timeout() method is not supported"
-        //             );
-        //         } else {
-        //             // A network error, or some other problem.
-        //             console.error(
-        //                 `Error: type: ${error.name}, message: ${error.message}`
-        //             );
-        //         }
-        //     }
-        // };
     }
 }

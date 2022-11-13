@@ -66,6 +66,7 @@ export default class Routes {
             console.log(error);
         }
     }
+
     /**
      * fetch handlers
      */
