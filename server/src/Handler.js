@@ -12,20 +12,44 @@ export default class Handler {
         /**
          * Express route handlers
          */
+
         this.app.get("/", async (req, res) => {
             /**
              * GET /
              * server probe request to check readiness of the worker service
              */
-            await this.routes.probe(req, res, "/");
+            await this.routes.probeWorker(req, res, "/");
         });
 
+        /**
+         * BonuslyWorker
+         */
+        this.app.get("/api/users", async (req, res) => {
+            /**
+             * GET /api/users
+             * get the Bonusly users
+             */
+            await this.routes.getUsersBonusly(req, res, "/api/users");
+        });
+
+        this.app.get("/api/users/:id", async (req, res) => {
+            /**
+             * GET /api/users
+             * get the Bonusly users
+             */
+            console.log(`id: ${req.params?.id}`);
+            await this.routes.getUserBonusly(req, res, "/api/users/:id");
+        });
+
+        /**
+         * NodeWorker
+         */
         this.app.get("/api/connect", async (req, res) => {
             /**
              * GET /api/connect
              * server request to worker to request connection to lightning node
              */
-            await this.routes.connect(req, res, "/api/connect");
+            await this.routes.connectNode(req, res, "/api/connect");
         });
 
         this.app.get("/api/info", async (req, res) => {
@@ -33,26 +57,28 @@ export default class Handler {
              * GET /api/info
              * server request to worker to request lightning node info/status
              */
-
-            await this.routes.getInfo(req, res, "/api/info");
+            await this.routes.getInfoNode(req, res, "/api/info");
         });
 
-        this.app.get("/api/paymentrequest/:id/invoice", async () => {
+        this.app.post("/api/paymentrequest/:id/invoice", async (req, res) => {
             /**
-             * GET /api/payment/:id/invoice
+             * POST /api/paymentrequest/:id/invoice
              * server request to worker to send a payment for a lightning invoice request
              */
-
-            await this.routes.paymentRequest(req, res, "/api/paymentrequest");
+            console.log(`id: ${id}`);
+            await this.routes.paymentRequestNode(
+                req,
+                res,
+                "/api/paymentrequest"
+            );
         });
 
         this.app.get("/api/disconnect", async (req, res) => {
-            await this.routes.disconnect(req, res, "/api/disconnect");
             /**
              * GET /api/disconnect
              * server request to worker to request to terminate connection to lightning node
              */
-            await this.routes.disconnect(req, res, "/api/disconnect");
+            await this.routes.disconnectNode(req, res, "/api/disconnect");
         });
     }
 }
