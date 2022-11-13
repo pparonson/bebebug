@@ -11,7 +11,7 @@ export default class NodeWorker {
         this.grpc = new LndGrpc({
             lndconnectUri:
                 this.config?.connections?.lightningNode?.lndConnect?.grpc
-                    ?.adminMacaroonUri?.localhost,
+                    ?.adminMacaroonUri?.local,
         });
         await this.grpc.connect();
 
@@ -26,7 +26,6 @@ export default class NodeWorker {
 
         const { Lightning } = this.grpc.services;
 
-        // const balance = await Lightning.walletBalance();
         const info = await Lightning.getInfo();
         console.log(JSON.stringify(info, null, 2));
 
@@ -70,7 +69,7 @@ export default class NodeWorker {
         });
     }
 
-    async disconnect(req, res, route) {
+    async disconnect(req, res) {
         console.log(`grpc.state: ${this.grpc.state}`);
 
         await this.grpc.disconnect();
