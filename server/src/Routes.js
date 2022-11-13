@@ -67,7 +67,7 @@ export default class Routes {
         }
     }
     /**
-     * Axios handlers
+     * fetch handlers
      */
     async sendGetRequest(url) {
         const res = await fetch(url);

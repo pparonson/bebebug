@@ -28,4 +28,3 @@ package-lock.json
 ./*/package-lock.json
 config/
 ./*/config/
-worker/src/BonuslyWorker.js
