@@ -1,29 +1,42 @@
 import config from "../config/config.js";
 import NodeWorker from "./NodeWorker.js";
+import BonuslyWorker from "./BonuslyWorker.js";
 import packageJson from "../package.json" assert { type: "json" };
 export default class Handler {
     constructor(app) {
         this.app = app;
         this.config = config;
         this.nodeWorker = new NodeWorker();
+        this.bonuslyWorker = new BonuslyWorker();
     }
 
     process() {
         console.log(`Begin ${packageJson.name} process..`);
-        /**
-         * Express route handlers
-         */
         this.app.get("/", async (req, res) => {
             res.send({
                 message: "Worker service is ready",
             });
         });
 
+        /**
+         * BonuslyWorker
+         */
+        this.app.get("/api/users", async (req, res) => {
+            /**
+             * GET /api/users
+             * get the Bonusly users
+             */
+            await this.bonuslyWorker.getUsers(req, res, "/users");
+        });
+
+        /**
+         * NodeWorker
+         */
         this.app.get("/api/connect", async (req, res) => {
             /**
              * GET /api/connect
              */
-            await this.nodeWorker.connect(req, res, "/api/connect");
+            await this.nodeWorker.connect(req, res);
         });
 
         this.app.get("/api/info", async (req, res) => {
