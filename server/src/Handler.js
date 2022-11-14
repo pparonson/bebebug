@@ -38,7 +38,11 @@ export default class Handler {
              * get the Bonusly users
              */
             console.log(`id: ${req.params?.id}`);
-            await this.routes.getUserBonusly(req, res, "/api/users/:id");
+            await this.routes.getUserBonusly(
+                req,
+                res,
+                `/api/users/${req.params?.id}`
+            );
         });
 
         /**
@@ -60,16 +64,16 @@ export default class Handler {
             await this.routes.getInfoNode(req, res, "/api/info");
         });
 
-        this.app.post("/api/paymentrequest/:id/invoice", async (req, res) => {
+        this.app.post("/api/payment/:id", async (req, res) => {
             /**
              * POST /api/paymentrequest/:id/invoice
              * server request to worker to send a payment for a lightning invoice request
              */
-            console.log(`id: ${id}`);
+            console.log(`id: ${req.params.id}`);
             await this.routes.paymentRequestNode(
                 req,
                 res,
-                "/api/paymentrequest"
+                `/api/payment/${req.params.id}`
             );
         });
 
