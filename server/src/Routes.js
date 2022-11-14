@@ -6,7 +6,7 @@ export default class Routes {
         this.url = `${this.worker?.url}:${this.worker?.port}`;
     }
 
-    async workerProbe(req, res, route) {
+    async probeWorker(req, res, route) {
         const url = `${this.url}${route}`;
         try {
             const response = await this.sendGetRequest(url);
