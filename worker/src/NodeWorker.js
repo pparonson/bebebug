@@ -10,7 +10,7 @@ export default class NodeWorker {
         this.grpc = new LndGrpc({
             lndconnectUri:
                 this.config?.connections?.lightningNode?.lndConnect?.grpc
-                    ?.adminMacaroonUri?.local,
+                    ?.adminMacaroonUri?.dev,
         });
         await this.grpc.connect();
 
