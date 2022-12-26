@@ -12,7 +12,7 @@ services:
       dockerfile: Dockerfile.dev
       context: ./client
     ports:
-      - "5173:5173"
+      - "3001:5173"
     volumes: 
       - /app/node_modules
       - ./client:/app
