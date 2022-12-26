@@ -1,5 +1,5 @@
 # base image
-FROM node:16-alpine
+FROM node:18-alpine
 
 # set working directory
 WORKDIR /app
@@ -8,18 +8,19 @@ WORKDIR /app
 # ENV PATH ./node_modules/.bin:$PATH
 
 # install and cache app dependencies
-# COPY package.json ./
 COPY package*.json ./
 
 RUN npm install
-RUN npm install @vue/cli -g
+# RUN npm install @vue/cli -g
 
 RUN mkdir ./node_modules/.cache && chmod -R 777 ./node_modules/.cache
-
+# RUN chmod -R 777 ./node_modules/
 COPY ./ ./
 
+RUN chmod -R 777 ./node_modules/
 # RUN chown -R node /app/node_modules
-# USER node
+USER node
 
 # start app
-CMD ["npm", "run", "serve"]
+# CMD ["npm", "run", "serve"]
+CMD ["npm", "run", "dev"]
